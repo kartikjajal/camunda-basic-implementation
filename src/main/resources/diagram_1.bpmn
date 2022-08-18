@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1dhbwum" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.2.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.17.0">
+  <bpmn:process id="Process_0fyde18" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="StartProcess">
+      <bpmn:outgoing>Flow_0xsqd2d</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_0xsqd2d" sourceRef="StartEvent_1" targetRef="Activity_1p3l5dr" />
+    <bpmn:sequenceFlow id="Flow_0rpm9dy" sourceRef="Activity_1p3l5dr" targetRef="Activity_012cq88" />
+    <bpmn:serviceTask id="Activity_1p3l5dr" name="GenerateNumber" camunda:class="com.example.workflow.delegate.GenerateNumberDelegate">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_0xsqd2d</bpmn:incoming>
+      <bpmn:outgoing>Flow_0rpm9dy</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_012cq88" name="PrintNumber" camunda:class="com.example.workflow.delegate.PrintNumberDelegate">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_0rpm9dy</bpmn:incoming>
+      <bpmn:outgoing>Flow_00v3wim</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_1hfh8ks" name="isOddNumber" camunda:class="com.example.workflow.delegate.ProcessOddNumber">
+      <bpmn:incoming>Flow_00v3wim</bpmn:incoming>
+      <bpmn:outgoing>Flow_01w87gr</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_00v3wim" sourceRef="Activity_012cq88" targetRef="Activity_1hfh8ks" />
+    <bpmn:exclusiveGateway id="Gateway_15dvdqr" name="Check Odd/Even Number">
+      <bpmn:incoming>Flow_01w87gr</bpmn:incoming>
+      <bpmn:outgoing>Flow_1o0hbzg</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1ttvuw3</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_01w87gr" sourceRef="Activity_1hfh8ks" targetRef="Gateway_15dvdqr" />
+    <bpmn:endEvent id="Event_0pdjke9" name="End Process">
+      <bpmn:incoming>Flow_1o0hbzg</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1o0hbzg" name="For Odd Number" sourceRef="Gateway_15dvdqr" targetRef="Event_0pdjke9">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${isOddNumber}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1ttvuw3" name="For Even Number Start Process Again" sourceRef="Gateway_15dvdqr" targetRef="Activity_163a4fz" />
+    <bpmn:serviceTask id="Activity_163a4fz" name="GenerateNumber" camunda:class="com.example.workflow.delegate.GenerateNumberDelegate">
+      <bpmn:incoming>Flow_1ttvuw3</bpmn:incoming>
+      <bpmn:outgoing>Flow_0dppvub</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_1l2mc4y" name="PrintNumber" camunda:class="com.example.workflow.delegate.PrintNumberDelegate">
+      <bpmn:incoming>Flow_0dppvub</bpmn:incoming>
+      <bpmn:outgoing>Flow_0h9s6ho</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0dppvub" sourceRef="Activity_163a4fz" targetRef="Activity_1l2mc4y" />
+    <bpmn:serviceTask id="Activity_1tr0whb" name="isOddNumber" camunda:class="com.example.workflow.delegate.ProcessOddNumber">
+      <bpmn:incoming>Flow_0h9s6ho</bpmn:incoming>
+      <bpmn:outgoing>Flow_1x4ps0w</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0h9s6ho" sourceRef="Activity_1l2mc4y" targetRef="Activity_1tr0whb" />
+    <bpmn:endEvent id="Event_01u91u1" name="End Process">
+      <bpmn:incoming>Flow_1x4ps0w</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1x4ps0w" sourceRef="Activity_1tr0whb" targetRef="Event_01u91u1" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_0fyde18">
+      <bpmndi:BPMNEdge id="Flow_0xsqd2d_di" bpmnElement="Flow_0xsqd2d">
+        <di:waypoint x="215" y="117" />
+        <di:waypoint x="270" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0rpm9dy_di" bpmnElement="Flow_0rpm9dy">
+        <di:waypoint x="370" y="117" />
+        <di:waypoint x="430" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_00v3wim_di" bpmnElement="Flow_00v3wim">
+        <di:waypoint x="530" y="117" />
+        <di:waypoint x="570" y="117" />
+        <di:waypoint x="570" y="230" />
+        <di:waypoint x="600" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_01w87gr_di" bpmnElement="Flow_01w87gr">
+        <di:waypoint x="700" y="230" />
+        <di:waypoint x="825" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1o0hbzg_di" bpmnElement="Flow_1o0hbzg">
+        <di:waypoint x="875" y="230" />
+        <di:waypoint x="1002" y="230" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="897" y="212" width="84" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ttvuw3_di" bpmnElement="Flow_1ttvuw3">
+        <di:waypoint x="850" y="255" />
+        <di:waypoint x="850" y="340" />
+        <di:waypoint x="890" y="340" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="804" y="278" width="88" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0dppvub_di" bpmnElement="Flow_0dppvub">
+        <di:waypoint x="990" y="340" />
+        <di:waypoint x="1020" y="340" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0h9s6ho_di" bpmnElement="Flow_0h9s6ho">
+        <di:waypoint x="1120" y="340" />
+        <di:waypoint x="1150" y="340" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1x4ps0w_di" bpmnElement="Flow_1x4ps0w">
+        <di:waypoint x="1250" y="340" />
+        <di:waypoint x="1282" y="340" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="165" y="142" width="64" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1jbnhbr_di" bpmnElement="Activity_1p3l5dr">
+        <dc:Bounds x="270" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0htrxmi_di" bpmnElement="Activity_012cq88">
+        <dc:Bounds x="430" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0f7xpfm_di" bpmnElement="Activity_1hfh8ks">
+        <dc:Bounds x="600" y="190" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_15dvdqr_di" bpmnElement="Gateway_15dvdqr" isMarkerVisible="true">
+        <dc:Bounds x="825" y="205" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="808" y="175" width="84" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0pdjke9_di" bpmnElement="Event_0pdjke9">
+        <dc:Bounds x="1002" y="212" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="989" y="255" width="63" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_05bxkk5" bpmnElement="Activity_163a4fz">
+        <dc:Bounds x="890" y="300" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0tacx9g" bpmnElement="Activity_1l2mc4y">
+        <dc:Bounds x="1020" y="300" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_07fe8w0" bpmnElement="Activity_1tr0whb">
+        <dc:Bounds x="1150" y="300" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_01u91u1_di" bpmnElement="Event_01u91u1">
+        <dc:Bounds x="1282" y="322" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1269" y="365" width="63" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
